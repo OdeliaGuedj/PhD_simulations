@@ -7,14 +7,14 @@ compare_algo_quadraGaussian = function(design_obj, output_obj){
   n = nrow(design_obj$xtilde)
   noise_sd = output_obj$noise_sd
   
-  RMSE = matrix(nrow = 1, ncol = 8); MSH = matrix(nrow = 1, ncol = 8); 
-  sensitivity = matrix(nrow = 1, ncol = 8); specificity = matrix(nrow = 1, ncol = 8); 
-  AUC = matrix(nrow = 1, ncol = 8); main_coverage = matrix(nrow = 1, ncol = 8); 
-  order2_coverage = matrix(nrow = 1, ncol = 8); main_exact_select = matrix(nrow = 1, ncol = 8); 
-  order2_exact_select = matrix(nrow = 1, ncol = 8); model_size = matrix(nrow = 1, ncol = 8);
-  times_ = matrix(nrow = 1, ncol = 8)
+  RMSE = matrix(nrow = 1, ncol = 7); MSH = matrix(nrow = 1, ncol = 7); 
+  sensitivity = matrix(nrow = 1, ncol = 7); specificity = matrix(nrow = 1, ncol = 7); 
+  AUC = matrix(nrow = 1, ncol = 7); main_coverage = matrix(nrow = 1, ncol = 7); 
+  order2_coverage = matrix(nrow = 1, ncol = 7); main_exact_select = matrix(nrow = 1, ncol = 7); 
+  order2_exact_select = matrix(nrow = 1, ncol = 7); model_size = matrix(nrow = 1, ncol = 7);
+  times_ = matrix(nrow = 1, ncol = 7)
   
-  algo_names = c("All Pairs LASSO", "HdS LASSO", "RAMP", "HierNet", "FAMILY", "PIE", "SPRINTR", "QRProj")
+  algo_names = c("All Pairs LASSO", "HdS LASSO", "RAMP", "HierNet", "FAMILY", "PIE", "SPRINTR")
   colnames(RMSE) = algo_names; colnames(MSH) = algo_names; colnames(sensitivity) = algo_names;
   colnames(specificity) = algo_names; colnames(AUC) = algo_names; colnames(main_coverage) = algo_names;
   colnames(order2_coverage) = algo_names; colnames(main_exact_select) = algo_names; 
@@ -254,110 +254,8 @@ compare_algo_quadraGaussian = function(design_obj, output_obj){
   model_size[1,"SPRINTR"] = compute_model_size(fitted_beta = sprintr_beta)
   
   
-  # QRProj
-  print("QRProj")
-  remove.packages("hierNet")
-  dyn.load("./hierNet_modified.github/hierNet_modified.github.so")
-  source("./hierNet_modified.github/hierNet_modified.github.R")
-  y = output_obj$Y
-  x = design_obj$xtilde[,1:pmain]
-  svd_x = svd(x)
-  PO.x_y =  x %*% (svd_x$v %*% solve((diag(svd_x$d))^2) %*% t(svd_x$v)) %*% t(x) %*% y
-  # Screening (with a Lasso)
-  ## Step 1: screning of main effects
-  fit_main = glmnet::cv.glmnet(x = x, y = PO.x_y, alpha =1, 
-                               familly = "gaussian", standardize=T,intercept=F)
-  hat_gamma = matrix(coef(fit_main, s = fit_main$lambda.1se))[-1]
-  hat_I_gamma = which(hat_gamma !=0)
-  x_screen = x[,hat_I_gamma]
-  x_screen_s = scale(x[,hat_I_gamma],T,T)
-  ## Step 2: Generating z using step 1 AND preserving the hierarchy 
-  z_hatIgamma = compute.interactions.c(x_screen_s,diagonal = T)
-  ## Step 3: Screening of the order 2
-  PO.xO_z_hatIgamma = z_hatIgamma - x %*% (svd_x$v %*% solve((diag(svd_x$d))^2) %*% t(svd_x$v)) %*% t(x) %*% z_hatIgamma
-  fit_interac = glmnet::cv.glmnet(x = PO.xO_z_hatIgamma, y = y-PO.x_y, 
-                                  alpha = 1, familly = "gaussian", 
-                                  standardize = T, intercept = F)
-  hat_theta = coef(fit_interac, fit_interac$lambda.1se)
-  hat_theta_names = rownames(hat_theta)[-1]
-  hat_theta = hat_theta[-1]
-  hat_I_theta = hat_theta_names[which(hat_theta !=0)]
-  tmp = apply(do.call(rbind,sapply(1:length(hat_I_theta), function(i) strsplit(hat_I_theta[i],":"))),2,as.numeric)
-  # Building the support of the screened theta: suppth, in order to use the solver of hierNet (ADMM + GD)
-  suppth = matrix(0,pmain,pmain)
-  sapply(1:nrow(tmp), function(i){
-    suppth[tmp[i,1],tmp[i,2]] <<- 1
-    suppth[tmp[i,2],tmp[i,1]] <<- 1})
-  suppth = suppth[hat_I_gamma,hat_I_gamma]
-  colnames(suppth) = hat_I_gamma
-  rownames(suppth) = hat_I_gamma
-  # Now estimating with QRProj
-  ## 1. Fitting with CV on the trainnig set 
-  y_s = as.numeric(y - mean(y))
-  fit.path = hierNet.path(x = x_screen[trainIndex,], stand.main = T,
-                          y = y_s[trainIndex],
-                          zz = PO.xO_z_hatIgamma[trainIndex,], stand.int = T, diagonal = T,
-                          strong = T,trace = 0)
-  fit.cv = hierNet.cv(fit.path,x_screen[trainIndex,],y_s[trainIndex],trace = 0)
-  ## 2. Fitted main effect
-  lambda_idx = which(fit.path$lamlist == fit.cv$lamhat.1se)
-  hat_bp = fit.path$bp[,lambda_idx]
-  hat_bn = fit.path$bn[,lambda_idx]
-  names(hat_bp) = hat_I_gamma
-  names(hat_bn) = hat_I_gamma
-  hat_gamma = rep(0,pmain)
-  names(hat_gamma) = 1:pmain
-  hat_gamma[hat_I_gamma] = hat_bp - hat_bn
-  ## 3. Fitted order 2
-  hat_th_mat = fit.path$th[,,lambda_idx]
-  hat_th_mat = (hat_th_mat + t(hat_th_mat))/2
-  colnames(hat_th_mat) = hat_I_gamma
-  rownames(hat_th_mat) = hat_I_gamma
-  ## 4. Prediction on the testing set
-  y_hat = predict.hierNet(fit.path,newx = x_screen[-trainIndex,], newzz = PO.xO_z_hatIgamma[-trainIndex,])[,lambda_idx]
-  ## 5. Shape results + performances
-  th_mat = matrix(0,pmain,pmain)
-  colnames(th_mat) = 1:pmain
-  rownames(th_mat) = 1:pmain
-  
-  for(i in rownames(hat_th_mat)){
-    for(j in colnames(hat_th_mat)){
-      th_mat[i,j] = hat_th_mat[i,j]} 
-  }
-  quadra = c()
-  names_quadra =c()
-  for(i in 1:pmain){
-    quadra[i] = th_mat[i,i]
-    names_quadra[i] = paste0(i," ",i)
-  }
-  names_interac = c()
-  interac = c()
-  l=1
-  for(i in 1:pmain){
-    for(j in 1:pmain){
-      if(i<j){
-        interac[l] = th_mat[i,j]
-        names_interac[l] = paste0(i," ",j)
-        l = l+1
-      }
-    }
-  }
-  names(quadra) = names_quadra
-  names(interac) = names_interac
-  hat_phi = c(hat_gamma, interac, quadra)
-  times_[1,"QRProj"] = NA
-  RMSE[1,"QRProj"] =  compute_RMSE(y_test,y_hat)
-  MSH[1,"QRProj"]  =  compute_MSH(true_beta = true_beta ,fitted_beta = hat_phi, main_effects = nb, pmain = pmain)
-  performance = eval_performance(true_beta = true_beta, fitted_beta = hat_phi)
-  sensitivity[1,"QRProj"]  = performance$sensitivity
-  specificity[1,"QRProj"]  = performance$specificity
-  AUC[1,"QRProj"]  = performance$auc
-  main_coverage[1,"QRProj"]  = compute_main_coverage(true_beta = true_beta, fitted_beta = hat_phi,pmain = pmain)
-  order2_coverage[1,"QRProj"]  = compute_order2_coverage(true_beta = true_beta, fitted_beta = hat_phi, pmain = pmain)
-  main_exact_select[1,"QRProj"]  = compute_main_exact_select(true_beta = true_beta, fitted_beta = hat_phi, pmain = pmain)
-  order2_exact_select[1,"QRProj"]  = compute_order2_exact_select(true_beta = true_beta, fitted_beta = hat_phi, pmain = pmain)
-  
-  betas = cbind(true_beta, all_pair_lasso_beta, HdS_lasso_beta, ramp_beta, hiernet_beta, family_beta, pie_beta, sprintr_beta, hat_phi)
+ 
+  betas = cbind(true_beta, all_pair_lasso_beta, HdS_lasso_beta, ramp_beta, hiernet_beta, family_beta, pie_beta, sprintr_beta)
   
   return(list(RMSE = RMSE,
               MSH = MSH,
