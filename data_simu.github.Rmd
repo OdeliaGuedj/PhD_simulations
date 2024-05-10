@@ -1,0 +1,195 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+
+# Simus
+## n = 600 
+```{r}
+all_compAlgo_snr1_cor0.8_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.8, p = 100, nb = 50,SNR=1)
+save(all_compAlgo_snr1_cor0.8_n600_p100, file = file.path("all_compAlgo_snr1_cor0.8_n600_p100.RData"))
+
+all_compAlgo_snr10_cor0.8_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.8, p = 100, nb = 50, SNR=10)
+save(all_compAlgo_snr10_cor0.8_n600_p100, file = file.path("all_compAlgo_snr10_cor0.8_n600_p100.RData"))
+
+all_compAlgo_snr100_cor0.8_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.8, p = 100, nb = 50, SNR=100)
+save(all_compAlgo_snr100_cor0.8_n600_p100, file = file.path("all_compAlgo_snr100_cor0.8_n600_p100.RData"))
+
+all_compAlgo_snr1000_cor0.8_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.8, p = 100, nb = 50, SNR=1000)
+save(all_compAlgo_snr1000_cor0.8_n600_p100, file = file.path("all_compAlgo_snr1000_cor0.8_n600_p100.RData"))
+```
+
+```{r}
+all_compAlgo_snr1_cor0.5_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.5, p = 100, nb = 50,SNR=1)
+save(all_compAlgo_snr1_cor0.5_n600_p100, file = file.path("all_compAlgo_snr1_cor0.5_n600_p100.RData"))
+
+all_compAlgo_snr10_cor0.5_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.5, p = 100, nb = 50,SNR=10)
+save(all_compAlgo_snr10_cor0.5_n600_p100, file = file.path("all_compAlgo_snr10_cor0.5_n600_p100.RData"))
+
+all_compAlgo_snr100_cor0.5_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.5, p = 100, nb = 50,SNR=100)
+save(call_compAlgo_snr100_cor0.5_n600_p100, file = file.path("all_compAlgo_snr100_cor0.5_n600_p100.RData"))
+
+all_compAlgo_snr1000_cor0.5_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.5, p = 100, nb = 50,SNR=1000)
+save(call_compAlgo_snr1000_cor0.5_n600_p100, file = file.path("all_compAlgo_snr1000_cor0.5_n600_p100.RData"))
+```
+
+```{r}
+all_compAlgo_snr1_cor0.2_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.2, p = 100, nb = 50,SNR=1)
+save(all_compAlgo_snr1_cor0.2_n600_p100, file = file.path("all_compAlgo_snr1_cor0.2_n600_p100.RData"))
+
+all_compAlgo_snr10_cor0.2_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.2, p = 100, nb = 50,SNR=10)
+save(all_compAlgo_snr10_cor0.2_n600_p100, file = file.path("all_compAlgo_snr10_cor0.2_n600_p100.RData"))
+
+all_compAlgo_snr100_cor0.2_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.2, p = 100, nb = 50,SNR=100)
+save(all_compAlgo_snr100_cor0.2_n600_p100, file = file.path("all_compAlgo_snr100_cor0.2_n600_p100.RData"))
+
+all_compAlgo_snr1000_cor0.2_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0.2, p = 100, nb = 50,SNR=1000)
+save(all_compAlgo_snr1000_cor0.2_n600_p100, file = file.path("all_compAlgo_snr1000_cor0.2_n600_p100.RData"))
+```
+
+```{r}
+all_compAlgo_snr1_cor0_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0, p = 100, nb = 50,SNR=1)
+save(all_compAlgo_snr1_cor0_n600_p100, file = file.path("all_compAlgo_snr1_cor0_n600_p100.RData"))
+
+all_compAlgo_snr10_cor0_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0, p = 100, nb = 50,SNR=10)
+save(all_compAlgo_snr10_cor0_n600_p100, file = file.path("all_compAlgo_snr10_cor0_n600_p100.RData"))
+
+all_compAlgo_snr100_cor0_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0, p = 100, nb = 50,SNR=100)
+save(all_compAlgo_snr100_cor0_n600_p100, file = file.path("all_compAlgo_snr100_cor0_n600_p100.RData"))
+
+all_compAlgo_snr1000_cor0_n600_p100 = mclapply(1:MC, mc.cores = num_cor, PAR.simu_quadraGaussian,
+n = 600, cor = 0, p = 100, nb = 50,SNR=1000)
+save(all_compAlgo_snr1000_cor0_n600_p100, file = file.path("all_compAlgo_snr1000_cor0_n600_p100.RData"))
+```
+
+
+
+# Shaping
+
+
+```{r}
+for(m in 1:50){
+all_compAlgo_snr1_cor0_n600_p100[[m]]$cor = 0
+all_compAlgo_snr1_cor0_n600_p100[[m]]$snr = 1
+all_compAlgo_snr1_cor0_n600_p100[[m]]$p = 100
+all_compAlgo_snr1_cor0_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr1_cor0.2_n600_p100[[m]]$cor = 0.2
+all_compAlgo_snr1_cor0.2_n600_p100[[m]]$snr = 1
+all_compAlgo_snr1_cor0.2_n600_p100[[m]]$p = 100
+all_compAlgo_snr1_cor0.2_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr1_cor0.5_n600_p100[[m]]$cor = 0.5
+all_compAlgo_snr1_cor0.5_n600_p100[[m]]$snr = 1
+all_compAlgo_snr1_cor0.5_n600_p100[[m]]$p = 100
+all_compAlgo_snr1_cor0.5_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr1_cor0.8_n600_p100[[m]]$cor = 0.8
+all_compAlgo_snr1_cor0.8_n600_p100[[m]]$snr = 1
+all_compAlgo_snr1_cor0.8_n600_p100[[m]]$p = 100
+all_compAlgo_snr1_cor0.8_n600_p100[[m]]$n = 600
+
+
+all_compAlgo_snr10_cor0_n600_p100[[m]]$cor = 0
+all_compAlgo_snr10_cor0_n600_p100[[m]]$snr = 10
+all_compAlgo_snr10_cor0_n600_p100[[m]]$p = 100
+all_compAlgo_snr10_cor0_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr10_cor0.2_n600_p100[[m]]$cor = 0.2
+all_compAlgo_snr10_cor0.2_n600_p100[[m]]$snr = 10
+all_compAlgo_snr10_cor0.2_n600_p100[[m]]$p = 100
+all_compAlgo_snr10_cor0.2_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr10_cor0.5_n600_p100[[m]]$cor = 0.5
+all_compAlgo_snr10_cor0.5_n600_p100[[m]]$snr = 10
+all_compAlgo_snr10_cor0.5_n600_p100[[m]]$p = 100
+all_compAlgo_snr10_cor0.5_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr10_cor0.8_n600_p100[[m]]$cor = 0.8
+all_compAlgo_snr10_cor0.8_n600_p100[[m]]$snr = 10
+all_compAlgo_snr10_cor0.8_n600_p100[[m]]$p = 100
+all_compAlgo_snr10_cor0.8_n600_p100[[m]]$n = 600
+
+
+all_compAlgo_snr100_cor0_n600_p100[[m]]$cor = 0
+all_compAlgo_snr100_cor0_n600_p100[[m]]$snr = 100
+all_compAlgo_snr100_cor0_n600_p100[[m]]$p = 100
+all_compAlgo_snr100_cor0_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr100_cor0.2_n600_p100[[m]]$cor = 0.2
+all_compAlgo_snr100_cor0.2_n600_p100[[m]]$snr = 100
+all_compAlgo_snr100_cor0.2_n600_p100[[m]]$p = 100
+all_compAlgo_snr100_cor0.2_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr100_cor0.5_n600_p100[[m]]$cor = 0.5
+all_compAlgo_snr100_cor0.5_n600_p100[[m]]$snr = 100
+all_compAlgo_snr100_cor0.5_n600_p100[[m]]$p = 100
+all_compAlgo_snr100_cor0.5_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr100_cor0.8_n600_p100[[m]]$cor = 0.8
+all_compAlgo_snr100_cor0.8_n600_p100[[m]]$snr = 100
+all_compAlgo_snr100_cor0.8_n600_p100[[m]]$p = 100
+all_compAlgo_snr100_cor0.8_n600_p100[[m]]$n = 600
+
+
+all_compAlgo_snr1000_cor0_n600_p100[[m]]$cor = 0
+all_compAlgo_snr1000_cor0_n600_p100[[m]]$snr = 1000
+all_compAlgo_snr1000_cor0_n600_p100[[m]]$p = 100
+all_compAlgo_snr1000_cor0_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr1000_cor0.2_n600_p100[[m]]$cor = 0.2
+all_compAlgo_snr1000_cor0.2_n600_p100[[m]]$snr = 1000
+all_compAlgo_snr1000_cor0.2_n600_p100[[m]]$p = 100
+all_compAlgo_snr1000_cor0.2_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr1000_cor0.5_n600_p100[[m]]$cor = 0.5
+all_compAlgo_snr1000_cor0.5_n600_p100[[m]]$snr = 1000
+all_compAlgo_snr1000_cor0.5_n600_p100[[m]]$p = 100
+all_compAlgo_snr1000_cor0.5_n600_p100[[m]]$n = 600
+
+all_compAlgo_snr1000_cor0.8_n600_p100[[m]]$cor = 0.8
+all_compAlgo_snr1000_cor0.8_n600_p100[[m]]$snr = 1000
+all_compAlgo_snr1000_cor0.8_n600_p100[[m]]$p = 100
+all_compAlgo_snr1000_cor0.8_n600_p100[[m]]$n = 600
+}
+```
+```{r}
+save(all_compAlgo_snr1_cor0_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr1_cor0_n600_p100.RData"))
+save(all_compAlgo_snr10_cor0_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr10_cor0_n600_p100.RData"))
+save(all_compAlgo_snr100_cor0_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr100_cor0_n600_p100.RData"))
+save(all_compAlgo_snr1000_cor0_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr1000_cor0_n600_p100.RData"))
+
+save(all_compAlgo_snr1_cor0.2_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr1_cor0.2_n600_p100.RData"))
+save(all_compAlgo_snr10_cor0.2_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr10_cor0.2_n600_p100.RData"))
+save(all_compAlgo_snr100_cor0.2_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr100_cor0.2_n600_p100.RData"))
+save(all_compAlgo_snr1000_cor0.2_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr1000_cor0.2_n600_p100.RData"))
+
+save(all_compAlgo_snr1_cor0.5_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr1_cor0.5_n600_p100.RData"))
+save(all_compAlgo_snr10_cor0.5_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr10_cor0.5_n600_p100.RData"))
+save(all_compAlgo_snr100_cor0.5_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr100_cor0.5_n600_p100.RData"))
+save(all_compAlgo_snr1000_cor0.5_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr1000_cor0.5_n600_p100.RData"))
+
+save(all_compAlgo_snr1_cor0.8_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr1_cor0.8_n600_p100.RData"))
+save(all_compAlgo_snr10_cor0.8_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr10_cor0.8_n600_p100.RData"))
+save(all_compAlgo_snr100_cor0.8_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr100_cor0.8_n600_p100.RData"))
+save(all_compAlgo_snr1000_cor0.8_n600_p100, file = file.path("/Users/oguedj/Dropbox/data_simu_these_data_clean/n600/final_data/n600_p100/all_compAlgo_snr1000_cor0.8_n600_p100.RData"))
+```
+

@@ -1,0 +1,674 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+```{r}
+library(ggplot2)
+library(cowplot)
+library(ggpubr)
+library(latex2exp)
+```
+
+
+# Loading the data
+First load the data from where it is (the data simulated for the article are in the red usb key).
+## n = 200
+```{r}
+file_names_n200 = list.files("/Users/oguedj/Dropbox/data_simu_these/data_clean/n200")
+file_dir_n200 = list.dirs("/Users/oguedj/Dropbox/data_simu_these/data_clean/n200")
+n = length(file_names_n200)
+for(j in 1:n){
+   assign(gsub(".RData","",file_names_n200[j]), get(load(paste0(file_dir_n200,"/",file_names_n200[j]))))
+}
+```
+## n = 600
+```{r}
+file_names_n600 = list.files("/Users/oguedj/Dropbox/data_simu_these/data_clean/n600")
+file_dir_n600 = list.dirs("/Users/oguedj/Dropbox/data_simu_these/data_clean/n600")
+n = length(file_names_n600)
+for(j in 1:n){
+   assign(gsub(".RData","",file_names_n600[j]), get(load(paste0(file_dir_n600,"/",file_names_n600[j]))))
+}
+```
+## n = 1000
+```{r}
+file_names_n1000 = list.files("/Users/oguedj/Dropbox/data_simu_these/data_clean/n1000")
+file_dir_n1000 = list.dirs("/Users/oguedj/Dropbox/data_simu_these/data_clean/n1000")
+n = length(file_names_n1000)
+for(j in 1:n){
+   assign(gsub(".RData","",file_names_n1000[j]), get(load(paste0(file_dir_n1000,"/",file_names_n1000[j]))))
+}
+```
+## n = 10000
+```{r}
+file_names_n10000 = list.files("/Users/oguedj/Dropbox/data_simu_these/data_clean/n10000")
+file_dir_n10000 = list.dirs("/Users/oguedj/Dropbox/data_simu_these/data_clean/n10000")
+n = length(file_names_n10000)
+for(j in 1:n){
+   assign(gsub(".RData","",file_names_n10000[j]), get(load(paste0(file_dir_n10000,"/",file_names_n10000[j]))))
+}
+```
+
+
+# Shaping the results
+```{r}
+MC = 50
+algo = c(rep("ORACLE",50),
+rep("APL",50),rep("HDSL",50),rep("RAMP",50),rep("HierNet",50), rep("FAMILY",50),rep("PIE",50),rep("HierNetProj",50),rep("SPRINTR",50))
+```
+## n = 200
+```{r}
+for(i in 1:MC) {
+  all_compAlgo_snr1_cor0.8_n200_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.8_n200_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.8_n200_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.8_n200_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0.5_n200_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.5_n200_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.5_n200_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.5_n200_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0.2_n200_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.2_n200_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.2_n200_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.2_n200_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0_n200_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0_n200_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0_n200_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0_n200_p100$SNR[[i]] =rep(1000,9)
+
+  all_compAlgo_snr1_cor0.8_n200_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr10_cor0.8_n200_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr100_cor0.8_n200_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr1000_cor0.8_n200_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr1_cor0.5_n200_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr10_cor0.5_n200_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr100_cor0.5_n200_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr1000_cor0.5_n200_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr1_cor0.2_n200_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr10_cor0.2_n200_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr100_cor0.2_n200_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr1000_cor0.2_n200_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr1_cor0_n200_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr10_cor0_n200_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr100_cor0_n200_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr1000_cor0_n200_p100$COR[[i]] = rep(0,9)
+  
+  all_compAlgo_snr1_cor0.8_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr10_cor0.8_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr100_cor0.8_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr1000_cor0.8_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr1_cor0.5_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr10_cor0.5_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr100_cor0.5_n200_p100$n[[i]]= rep(200,9)
+  all_compAlgo_snr1000_cor0.5_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr1_cor0.2_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr10_cor0.2_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr100_cor0.2_n200_p100$n [[i]]= rep(200,9)
+  all_compAlgo_snr1000_cor0.2_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr1_cor0_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr10_cor0_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr100_cor0_n200_p100$n[[i]] = rep(200,9)
+  all_compAlgo_snr1000_cor0_n200_p100$n[[i]] = rep(200,9)
+}
+```
+```{r}
+list_settings_n200 = list(all_compAlgo_snr1_cor0.8_n200_p100,
+                          all_compAlgo_snr10_cor0.8_n200_p100,
+                          all_compAlgo_snr100_cor0.8_n200_p100,
+                          all_compAlgo_snr1000_cor0.8_n200_p100,
+                          all_compAlgo_snr1_cor0.5_n200_p100,
+                          all_compAlgo_snr10_cor0.5_n200_p100,
+                          all_compAlgo_snr100_cor0.5_n200_p100,
+                          all_compAlgo_snr1000_cor0.5_n200_p100,
+                          all_compAlgo_snr1_cor0.2_n200_p100,
+                          all_compAlgo_snr10_cor0.2_n200_p100,
+                          all_compAlgo_snr100_cor0.2_n200_p100,
+                          all_compAlgo_snr1000_cor0.2_n200_p100,
+                          all_compAlgo_snr1_cor0_n200_p100,
+                          all_compAlgo_snr10_cor0_n200_p100,
+                          all_compAlgo_snr100_cor0_n200_p100,
+                          all_compAlgo_snr1000_cor0_n200_p100)
+
+```
+
+```{r}
+data_200 = 
+  do.call(rbind,lapply(list_settings_n200, function(l) data.frame(
+  ALGO = algo,
+  SNR = as.vector(do.call(rbind, l$SNR)),
+  COR = as.vector(do.call(rbind, l$COR)),
+  n = as.vector(do.call(rbind, l$n)),
+  RMSE = as.vector(do.call(rbind, l$RMSE)),
+  AUC = as.vector(do.call(rbind, l$auc)),
+  MSH = as.vector(do.call(rbind, l$MSH)),
+  SENS = as.vector(do.call(rbind, l$sens)),
+  SPEC = as.vector(do.call(rbind, l$spec)),
+  MAIN_COVERAGE = as.vector(do.call(rbind, l$main_coverage)),
+  ORDER2_COVERAGE = as.vector(do.call(rbind, l$order2_coverage)),
+  MAIN_EXACT_SELECT = as.vector(do.call(rbind, l$main_exact_select)),
+  ORDER2_EXACT_SELECT = as.vector(do.call(rbind, l$main_exact_select)),
+  MODEL_SIZE = as.vector(do.call(rbind, l$model_size)),
+  TIMES = as.vector(do.call(rbind, l$times_))
+                      )
+  ))
+
+data_200_graph = subset(data_200, subset = !(data_200$ALGO %in% c("ORACLE", "HierNetProj")))
+dim(data_200)
+dim(data_200_graph)
+```
+
+## n = 600
+```{r}
+for(i in 1:MC) {
+  all_compAlgo_snr1_cor0.8_n600_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.8_n600_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.8_n600_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.8_n600_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0.5_n600_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.5_n600_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.5_n600_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.5_n600_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0.2_n600_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.2_n600_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.2_n600_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.2_n600_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0_n600_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0_n600_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0_n600_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0_n600_p100$SNR[[i]] =rep(1000,9)
+
+  all_compAlgo_snr1_cor0.8_n600_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr10_cor0.8_n600_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr100_cor0.8_n600_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr1000_cor0.8_n600_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr1_cor0.5_n600_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr10_cor0.5_n600_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr100_cor0.5_n600_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr1000_cor0.5_n600_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr1_cor0.2_n600_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr10_cor0.2_n600_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr100_cor0.2_n600_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr1000_cor0.2_n600_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr1_cor0_n600_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr10_cor0_n600_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr100_cor0_n600_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr1000_cor0_n600_p100$COR[[i]] = rep(0,9)
+  
+  all_compAlgo_snr1_cor0.8_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr10_cor0.8_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr100_cor0.8_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr1000_cor0.8_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr1_cor0.5_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr10_cor0.5_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr100_cor0.5_n600_p100$n[[i]]= rep(600,9)
+  all_compAlgo_snr1000_cor0.5_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr1_cor0.2_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr10_cor0.2_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr100_cor0.2_n600_p100$n [[i]]= rep(600,9)
+  all_compAlgo_snr1000_cor0.2_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr1_cor0_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr10_cor0_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr100_cor0_n600_p100$n[[i]] = rep(600,9)
+  all_compAlgo_snr1000_cor0_n600_p100$n[[i]] = rep(600,9)
+}
+```
+```{r}
+list_settings_n600 = list(all_compAlgo_snr1_cor0.8_n600_p100,
+                          all_compAlgo_snr10_cor0.8_n600_p100,
+                          all_compAlgo_snr100_cor0.8_n600_p100,
+                          all_compAlgo_snr1000_cor0.8_n600_p100,
+                          all_compAlgo_snr1_cor0.5_n600_p100,
+                          all_compAlgo_snr10_cor0.5_n600_p100,
+                          all_compAlgo_snr100_cor0.5_n600_p100,
+                          all_compAlgo_snr1000_cor0.5_n600_p100,
+                          all_compAlgo_snr1_cor0.2_n600_p100,
+                          all_compAlgo_snr10_cor0.2_n600_p100,
+                          all_compAlgo_snr100_cor0.2_n600_p100,
+                          all_compAlgo_snr1000_cor0.2_n600_p100,
+                          all_compAlgo_snr1_cor0_n600_p100,
+                          all_compAlgo_snr10_cor0_n600_p100,
+                          all_compAlgo_snr100_cor0_n600_p100,
+                          all_compAlgo_snr1000_cor0_n600_p100)
+```
+
+```{r}
+data_600 = 
+  do.call(rbind,lapply(list_settings_n600, function(l) data.frame(
+  ALGO = algo,
+  SNR = as.vector(do.call(rbind, l$SNR)),
+  COR = as.vector(do.call(rbind, l$COR)),
+  n = as.vector(do.call(rbind, l$n)),
+  RMSE = as.vector(do.call(rbind, l$RMSE)),
+  AUC = as.vector(do.call(rbind, l$auc)),
+  MSH = as.vector(do.call(rbind, l$MSH)),
+  SENS = as.vector(do.call(rbind, l$sens)),
+  SPEC = as.vector(do.call(rbind, l$spec)),
+  MAIN_COVERAGE = as.vector(do.call(rbind, l$main_coverage)),
+  ORDER2_COVERAGE = as.vector(do.call(rbind, l$order2_coverage)),
+  MAIN_EXACT_SELECT = as.vector(do.call(rbind, l$main_exact_select)),
+  ORDER2_EXACT_SELECT = as.vector(do.call(rbind, l$main_exact_select)),
+  MODEL_SIZE = as.vector(do.call(rbind, l$model_size)),
+  TIMES = as.vector(do.call(rbind, l$times_))
+                      )
+  ))
+
+data_600_graph = subset(data_600, subset = !(data_600$ALGO %in% c("ORACLE", "HierNetProj")))
+#dim(data_600)
+#dim(data_600_graph)
+```
+
+## n = 1000
+```{r}
+for(i in 1:MC) {
+  all_compAlgo_snr1_cor0.8_n1000_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.8_n1000_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.8_n1000_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.8_n1000_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0.5_n1000_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.5_n1000_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.5_n1000_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.5_n1000_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0.2_n1000_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.2_n1000_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.2_n1000_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.2_n1000_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0_n1000_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0_n1000_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0_n1000_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0_n1000_p100$SNR[[i]] =rep(1000,9)
+
+  all_compAlgo_snr1_cor0.8_n1000_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr10_cor0.8_n1000_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr100_cor0.8_n1000_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr1000_cor0.8_n1000_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr1_cor0.5_n1000_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr10_cor0.5_n1000_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr100_cor0.5_n1000_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr1000_cor0.5_n1000_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr1_cor0.2_n1000_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr10_cor0.2_n1000_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr100_cor0.2_n1000_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr1000_cor0.2_n1000_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr1_cor0_n1000_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr10_cor0_n1000_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr100_cor0_n1000_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr1000_cor0_n1000_p100$COR[[i]] = rep(0,9)
+  
+  all_compAlgo_snr1_cor0.8_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr10_cor0.8_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr100_cor0.8_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr1000_cor0.8_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0.5_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr10_cor0.5_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr100_cor0.5_n1000_p100$n[[i]]= rep(1000,9)
+  all_compAlgo_snr1000_cor0.5_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0.2_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr10_cor0.2_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr100_cor0.2_n1000_p100$n [[i]]= rep(1000,9)
+  all_compAlgo_snr1000_cor0.2_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr10_cor0_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr100_cor0_n1000_p100$n[[i]] = rep(1000,9)
+  all_compAlgo_snr1000_cor0_n1000_p100$n[[i]] = rep(1000,9)
+}
+```
+```{r}
+list_settings_n1000 = list(all_compAlgo_snr1_cor0.8_n1000_p100,
+                          all_compAlgo_snr10_cor0.8_n1000_p100,
+                          all_compAlgo_snr100_cor0.8_n1000_p100,
+                          all_compAlgo_snr1000_cor0.8_n1000_p100,
+                          all_compAlgo_snr1_cor0.5_n1000_p100,
+                          all_compAlgo_snr10_cor0.5_n1000_p100,
+                          all_compAlgo_snr100_cor0.5_n1000_p100,
+                          all_compAlgo_snr1000_cor0.5_n1000_p100,
+                          all_compAlgo_snr1_cor0.2_n1000_p100,
+                          all_compAlgo_snr10_cor0.2_n1000_p100,
+                          all_compAlgo_snr100_cor0.2_n1000_p100,
+                          all_compAlgo_snr1000_cor0.2_n1000_p100,
+                          all_compAlgo_snr1_cor0_n1000_p100,
+                          all_compAlgo_snr10_cor0_n1000_p100,
+                          all_compAlgo_snr100_cor0_n1000_p100,
+                          all_compAlgo_snr1000_cor0_n1000_p100)
+```
+
+```{r}
+data_n1000 = 
+  do.call(rbind,lapply(list_settings_n1000, function(l) data.frame(
+  ALGO = algo,
+  SNR = as.vector(do.call(rbind, l$SNR)),
+  COR = as.vector(do.call(rbind, l$COR)),
+  n = as.vector(do.call(rbind, l$n)),
+  RMSE = as.vector(do.call(rbind, l$RMSE)),
+  AUC = as.vector(do.call(rbind, l$auc)),
+  MSH = as.vector(do.call(rbind, l$MSH)),
+  SENS = as.vector(do.call(rbind, l$sens)),
+  SPEC = as.vector(do.call(rbind, l$spec)),
+  MAIN_COVERAGE = as.vector(do.call(rbind, l$main_coverage)),
+  ORDER2_COVERAGE = as.vector(do.call(rbind, l$order2_coverage)),
+  MAIN_EXACT_SELECT = as.vector(do.call(rbind, l$main_exact_select)),
+  ORDER2_EXACT_SELECT = as.vector(do.call(rbind, l$main_exact_select)),
+  MODEL_SIZE = as.vector(do.call(rbind, l$model_size)),
+  TIMES = as.vector(do.call(rbind, l$times_))
+                      )
+  ))
+#save(data_1000, 
+#     file= file.path("/Users/oguedj/Desktop/Data These/comp_algo/comp_algo_all/n1000/data_1000.RData"))
+
+data_n1000_graph = subset(data_n1000, subset = !(data_n1000$ALGO %in% c("ORACLE", "HierNetProj")))
+dim(data_n1000)
+dim(data_n1000_graph)
+```
+
+
+## n = 10000
+```{r}
+for(i in 1:MC) {
+  all_compAlgo_snr1_cor0.8_n10000_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.8_n10000_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.8_n10000_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.8_n10000_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0.5_n10000_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.5_n10000_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.5_n10000_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.5_n10000_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0.2_n10000_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0.2_n10000_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0.2_n10000_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0.2_n10000_p100$SNR[[i]] = rep(1000,9)
+  all_compAlgo_snr1_cor0_n10000_p100$SNR[[i]] = rep(1,9)
+  all_compAlgo_snr10_cor0_n10000_p100$SNR[[i]] = rep(10,9)
+  all_compAlgo_snr100_cor0_n10000_p100$SNR[[i]] = rep(100,9)
+  all_compAlgo_snr1000_cor0_n10000_p100$SNR[[i]] =rep(1000,9)
+
+  all_compAlgo_snr1_cor0.8_n10000_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr10_cor0.8_n10000_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr100_cor0.8_n10000_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr1000_cor0.8_n10000_p100$COR[[i]] = rep(0.8,9)
+  all_compAlgo_snr1_cor0.5_n10000_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr10_cor0.5_n10000_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr100_cor0.5_n10000_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr1000_cor0.5_n10000_p100$COR[[i]] = rep(0.5,9)
+  all_compAlgo_snr1_cor0.2_n10000_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr10_cor0.2_n10000_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr100_cor0.2_n10000_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr1000_cor0.2_n10000_p100$COR[[i]] = rep(0.2,9)
+  all_compAlgo_snr1_cor0_n10000_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr10_cor0_n10000_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr100_cor0_n10000_p100$COR[[i]] = rep(0,9)
+  all_compAlgo_snr1000_cor0_n10000_p100$COR[[i]] = rep(0,9)
+  
+  all_compAlgo_snr1_cor0.8_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr10_cor0.8_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr100_cor0.8_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr1000_cor0.8_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr1_cor0.5_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr10_cor0.5_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr100_cor0.5_n10000_p100$n[[i]]= rep(10000,9)
+  all_compAlgo_snr1000_cor0.5_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr1_cor0.2_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr10_cor0.2_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr100_cor0.2_n10000_p100$n [[i]]= rep(10000,9)
+  all_compAlgo_snr1000_cor0.2_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr1_cor0_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr10_cor0_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr100_cor0_n10000_p100$n[[i]] = rep(10000,9)
+  all_compAlgo_snr1000_cor0_n10000_p100$n[[i]] = rep(10000,9)
+}
+```
+```{r}
+list_settings_n10000 = list(all_compAlgo_snr1_cor0.8_n10000_p100,
+                          all_compAlgo_snr10_cor0.8_n10000_p100,
+                          all_compAlgo_snr100_cor0.8_n10000_p100,
+                          all_compAlgo_snr1000_cor0.8_n10000_p100,
+                          all_compAlgo_snr1_cor0.5_n10000_p100,
+                          all_compAlgo_snr10_cor0.5_n10000_p100,
+                          all_compAlgo_snr100_cor0.5_n10000_p100,
+                          all_compAlgo_snr1000_cor0.5_n10000_p100,
+                          all_compAlgo_snr1_cor0.2_n10000_p100,
+                          all_compAlgo_snr10_cor0.2_n10000_p100,
+                          all_compAlgo_snr100_cor0.2_n10000_p100,
+                          all_compAlgo_snr1000_cor0.2_n10000_p100,
+                          all_compAlgo_snr1_cor0_n10000_p100,
+                          all_compAlgo_snr10_cor0_n10000_p100,
+                          all_compAlgo_snr100_cor0_n10000_p100,
+                          all_compAlgo_snr1000_cor0_n10000_p100)
+
+#list_settings_n10000 = list(all_compAlgo_snr1_cor0.8_n10000_p100)
+```
+
+```{r}
+data_n10000 = 
+  do.call(rbind,lapply(list_settings_n10000, function(l) data.frame(
+  ALGO = algo,
+  SNR = as.vector(do.call(rbind, l$SNR)),
+  COR = as.vector(do.call(rbind, l$COR)),
+  n = as.vector(do.call(rbind, l$n)),
+  RMSE = as.vector(do.call(rbind, l$RMSE)),
+  AUC = as.vector(do.call(rbind, l$auc)),
+  MSH = as.vector(do.call(rbind, l$MSH)),
+  SENS = as.vector(do.call(rbind, l$sens)),
+  SPEC = as.vector(do.call(rbind, l$spec)),
+  MAIN_COVERAGE = as.vector(do.call(rbind, l$main_coverage)),
+  ORDER2_COVERAGE = as.vector(do.call(rbind, l$order2_coverage)),
+  MAIN_EXACT_SELECT = as.vector(do.call(rbind, l$main_exact_select)),
+  ORDER2_EXACT_SELECT = as.vector(do.call(rbind, l$main_exact_select)),
+  MODEL_SIZE = as.vector(do.call(rbind, l$model_size)),
+  TIMES = as.vector(do.call(rbind, l$times_))
+                      )
+  ))
+#save(data_10000, 
+#     file= file.path("/Users/oguedj/Desktop/Data These/comp_algo/comp_algo_all/n10000/data_10000.RData"))
+
+data_n10000_graph = subset(data_n10000, subset = !(data_n10000$ALGO %in% c("ORACLE", "HierNetProj")))
+dim(data_n10000)
+dim(data_n10000_graph)
+```
+
+
+# Graphs
+## n = 200
+```{r}
+data_200_graph$SNR = factor(data_200_graph$SNR, levels = c("1", "10", "100", "1000"), labels = c("SNR = 1", "SNR = 10", "SNR = 100", "SNR = 1000"))
+ ggplot(data_200_graph, aes(y = as.numeric(RMSE), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 200, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n200/boxplot_RMSE_n200.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_200_graph, aes(y = as.numeric(TIMES), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 200, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n200/boxplot_times_n200.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_200_graph, aes(y = as.numeric(MSH), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 200, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n200/boxplot_MSH_n200.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_200_graph, aes(y = as.numeric(AUC), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 200, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n200/boxplot_AUC_n200.pdf", height = 210, width = 297, units = "mm")
+```
+
+## n = 600
+```{r}
+data_600_graph$SNR = factor(data_600_graph$SNR, levels = c("1", "10", "100", "1000"), labels = c("SNR = 1", "SNR = 10", "SNR = 100", "SNR = 1000"))
+ ggplot(data_600_graph, aes(y = as.numeric(RMSE), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 600, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n600/boxplot_RMSE_n600.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_600_graph, aes(y = as.numeric(TIMES), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 600, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n600/boxplot_times_n600.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_600_graph, aes(y = as.numeric(MSH), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 600, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n600/boxplot_MSH_n600.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_600_graph, aes(y = as.numeric(AUC), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 600, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n600/boxplot_AUC_n600.pdf", height = 210, width = 297, units = "mm")
+```
+
+## n = 1000
+```{r}
+data_n1000_graph$SNR = factor(data_n1000_graph$SNR, levels = c("1", "10", "100", "1000"), labels = c("SNR = 1", "SNR = 10", "SNR = 100", "SNR = 1000"))
+ ggplot(data_n1000_graph, aes(y = as.numeric(RMSE), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 1000, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n1000/boxplot_RMSE_n1000.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_n1000_graph, aes(y = as.numeric(TIMES), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 1000, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n1000/boxplot_times_n1000.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_n1000_graph, aes(y = as.numeric(MSH), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 1000, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n1000/boxplot_MSH_n1000.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_n1000_graph, aes(y = as.numeric(AUC), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 1000, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n1000/boxplot_AUC_n1000.pdf", height = 210, width = 297, units = "mm")
+```
+
+## n = 10000
+```{r}
+data_n10000_graph$SNR = factor(data_n10000_graph$SNR, levels = c("1", "10", "100", "1000"), labels = c("SNR = 1", "SNR = 10", "SNR = 100", "SNR = 1000"))
+ ggplot(data_n10000_graph, aes(y = as.numeric(RMSE), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 10000, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n10000/boxplot_RMSE_n10000.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_n10000_graph, aes(y = as.numeric(TIMES), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 10000, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n10000/boxplot_times_n10000.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_n10000_graph, aes(y = as.numeric(MSH), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 10000, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n10000/boxplot_MSH_n10000.pdf", height = 210, width = 297, units = "mm")
+```
+```{r}
+ ggplot(data_n10000_graph, aes(y = as.numeric(AUC), x = factor(factor(ALGO)), col = factor(COR))) +
+  geom_boxplot(lwd = .1, outlier.size = .3) +
+  scale_x_discrete("") + 
+  scale_y_continuous("RMSE") +
+  #ggtitle("n = 10000, pmain = 100") +
+  guides(col = guide_legend(TeX("$\\rho"))) +
+  facet_grid(.~factor(SNR)) +
+  scale_colour_brewer(palette = "PuOr") +
+  theme(axis.text.x = element_text(face="bold",size=5, angle=30))
+ggsave("/Users/oguedj/Dropbox/data_simu_these/graphs/n10000/boxplot_AUC_n10000.pdf", height = 210, width = 297, units = "mm")
+```
+
